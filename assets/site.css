@@ -1,0 +1,28 @@
+*,*::before,*::after{box-sizing:border-box}
+:root{--s:1;--ext:0px;--vhc:100vh}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+/* Decorative elements bleed past the canvas edges by design; clip them so the page never
+   scrolls sideways. `clip` (unlike `hidden`) keeps position:sticky working. */
+main{position:relative;overflow-x:clip}
+@supports not (overflow-x:clip){html{overflow-x:hidden}}
+.blk{position:relative;width:100%}
+.blk>.bg{position:absolute;inset:0;overflow:hidden}
+.blk>.bg>.bgi{position:absolute;inset:0;background-repeat:no-repeat}
+.cv{position:absolute;top:0;left:50%;transform:scale(var(--s));transform-origin:top center}
+.el{position:absolute}
+.el>.in{display:block;width:100%;height:100%;position:relative;color:inherit;text-decoration:none}
+a.in{cursor:pointer}
+.tx{width:100%;height:100%}
+.tx p,.tx h1,.tx h2,.tx h3{margin:0;font:inherit}
+.img{width:100%;height:100%;background-repeat:no-repeat}
+.el svg{display:block;width:100%;height:100%}
+.btn{display:flex;align-items:center;width:100%;height:100%;white-space:nowrap}
+.gal{display:grid;width:100%;height:100%}
+.gi{background-size:cover;background-position:center;min-height:0}
+.gal-empty{width:100%;height:100%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;font:12px sans-serif;color:rgba(0,0,0,.4);letter-spacing:.1em;text-transform:uppercase}
+.el iframe{width:100%;height:100%;border:0}
+/* Canvas views swap instantly, as in Showit's runtime. */
+.st{visibility:hidden}
+.blk>.bg>.bgi.plx{bottom:auto;will-change:transform}
