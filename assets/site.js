@@ -6,6 +6,8 @@
   var MOBILE_MAX_SCALE = 1.6;
   // Text may shrink by at most this much to fit its box.
   var MIN_FIT = 0.82;
+  // ...and by up to this much when one long word wouldn't otherwise fit on a line.
+  var MIN_WORD_FIT = 0.6;
   var lastMode = null;
 
   // Scale the fixed-width design canvases to the window (Showit behaviour).
@@ -44,6 +46,11 @@
       var base = parseFloat(cs.fontSize);
       var size = base;
       while (size > base * MIN_FIT && overflows(t)) {
+        size -= base * 0.02;
+        t.style.fontSize = size + "px";
+      }
+      // A single word wider than the box: keep shrinking (further) rather than split the word.
+      while (size > base * MIN_WORD_FIT && t.scrollWidth > t.clientWidth + 1) {
         size -= base * 0.02;
         t.style.fontSize = size + "px";
       }
