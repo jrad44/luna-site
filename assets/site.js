@@ -123,14 +123,16 @@
     document.querySelectorAll(".blk").forEach(function (block) {
       var img = block.querySelector(":scope>.bg>.bgi");
       var cs = getComputedStyle(block);
-      var on = cs.getPropertyValue("--px").trim() === "1" && getComputedStyle(img).display !== "none";
+      var mode = cs.getPropertyValue("--px").trim();
+      var on = (mode === "1" || mode === "2") && getComputedStyle(img).display !== "none";
       img.classList.toggle("plx", on);
       if (!on) {
         img.style.transform = "";
         img.style.height = "";
         return;
       }
-      plx.push({ block: block, img: img, anchor: cs.getPropertyValue("--py").replace(/['"\s]/g, "") || "m" });
+      plx.push({ block: block, img: img, gentle: mode === "2",
+        anchor: cs.getPropertyValue("--py").replace(/['"\s]/g, "") || "m" });
     });
     parallax();
   }
@@ -143,7 +145,12 @@
       if (r.bottom < 0 || r.top > vh) continue;
       var h = r.height, imgH = Math.max(2 * vh, h * 1.5);
       var ty;
-      if (p.anchor === "b") ty = -(imgH - h) - 0.5 * r.top;
+      if (p.gentle) {
+        // Fit-to-photo sections: a layer only 15% taller than the section drifts down as
+        // you scroll, so the photo's framing barely changes.
+        imgH = h * 1.15;
+        ty = -0.15 * h + Math.min(0.15 * h, 0.3 * Math.max(0, -r.top));
+      } else if (p.anchor === "b") ty = -(imgH - h) - 0.5 * r.top;
       else if (p.anchor === "t") ty = -0.5 * (r.top - (vh - h));
       else ty = (h - imgH) / 2 - 0.5 * (r.top - (vh - h) / 2);
       p.img.style.height = imgH + "px";
