@@ -26,3 +26,5 @@ a.in{cursor:pointer}
 /* Canvas views swap instantly, as in Showit's runtime. */
 .st{visibility:hidden}
 .blk>.bg>.bgi.plx{bottom:auto;will-change:transform}
+.blk>.bg>.bgi>.sl{position:absolute;inset:0;background-repeat:no-repeat;opacity:0;transition:opacity 1.2s ease}
+.blk>.bg>.bgi>.sl.on{opacity:1}

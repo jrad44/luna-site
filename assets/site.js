@@ -112,6 +112,26 @@
     }, +block.dataset.aav * 1000);
   });
 
+  // Background slideshows: extra photos fade in over the section's own background photo
+  // in turn. Which photos are in the rotation depends on the layout (desktop vs mobile).
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll(".blk[data-slides]").forEach(function (block) {
+      var step = 0;
+      setInterval(function () {
+        var shown = [].filter.call(block.querySelectorAll(".sl"), function (s) {
+          return getComputedStyle(s).display !== "none";
+        });
+        step = (step + 1) % (shown.length + 1);
+        var next = step ? shown[step - 1] : null;
+        if (next) next.classList.add("on");
+        // Later photos sit on top, so the previous one stays put until the new one has faded in.
+        setTimeout(function () {
+          block.querySelectorAll(".sl.on").forEach(function (s) { if (s !== next) s.classList.remove("on"); });
+        }, next ? 1300 : 0);
+      }, +block.dataset.slides * 1000);
+    });
+  }
+
   // Parallax backgrounds (Showit bgScroll "x"): the image layer is twice the window
   // height and moves at half the scroll speed, anchored per its vertical position
   // (b = bottom edge aligned when the block reaches the top of the window,
